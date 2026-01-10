@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Smooth selection color matching your brand */
+::selection {
+  background-color: #027E36; /* Blue */
+  color: white;
+}
+
+body {
+  background-color: #ffffff;
+  color: #0f172a; /* Slate 900 */
+}
+
+@layer utilities {
+  .clip-path-slant {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    /* This creates a subtle diagonal cut at the bottom of the section */
+  }
+}
