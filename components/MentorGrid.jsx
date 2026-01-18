@@ -18,45 +18,39 @@ const playfair = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], 
 // --- DATA ---
 const mentors = [
   {
-    name: "Amit Kumar",
-    role: "Founder",
-    company: "UnicornCo",
-    ex: "Ex-Google",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&fit=crop",
+    name: "Prabhat kumar singh",
+    role: "Founder & CEO",
+    company: "Digital Hashtag | Jaago Saran",
+    image: "/mentorimage/prabhat.jpg",
   },
   {
     name: "Sneha Roy",
     role: "Partner",
     company: "BiharFund",
-    ex: "IIM Ahmedabad",
     image: "https://images.unsplash.com/photo-1573496359-136d9420f9d1?w=600&h=800&fit=crop",
   },
   {
     name: "Rahul Singh",
     role: "CTO",
     company: "TechGiant",
-    ex: "IIT Patna",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop",
   },
   {
     name: "Priya Das",
     role: "VP Product",
     company: "Amazon",
-    ex: "Ex-Flipkart",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=800&fit=crop",
   },
   {
     name: "Vikram Malhotra",
     role: "Angel Investor",
     company: "EarlyStage",
-    ex: "Serial Entrepreneur",
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=800&fit=crop",
   },
   {
     name: "Anjali Verma",
     role: "Head of AI",
     company: "DataCorp",
-    ex: "Ex-Microsoft",
     image: "https://images.unsplash.com/photo-1598550832205-d5b5fe415702?w=600&h=800&fit=crop",
   },
 ];
@@ -72,20 +66,27 @@ function MentorCard({ data }) {
         className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] grayscale-0 brightness-100 scale-100 md:grayscale md:brightness-[0.85] md:group-hover:grayscale-0 md:group-hover:brightness-100 md:group-hover:scale-110"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0F1014] via-transparent to-transparent opacity-40 md:opacity-80 md:group-hover:opacity-40 transition-opacity duration-500" />
-      <div className="absolute top-5 left-5 z-20">
-        <span className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] md:text-xs font-bold tracking-wider uppercase shadow-lg">
-          {data.ex}
-        </span>
-      </div>
+      
+
+      {/* Text Content */}
       <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20 transition-transform duration-500 ease-out translate-y-0 md:translate-y-4 md:group-hover:translate-y-0">
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-5 rounded-2xl overflow-hidden relative shadow-2xl ring-1 ring-white/10">
           <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#32317D] to-[#619173]" />
-          <h3 className="text-white font-bold text-2xl md:text-3xl mb-1 drop-shadow-sm tracking-tight">{data.name}</h3>
+          
+          <h3 className="text-white font-bold text-2xl md:text-3xl mb-1 drop-shadow-sm tracking-tight">
+            {data.name}
+          </h3>
+          
           <div className="flex flex-col items-start gap-1 mb-4">
-            <span className="text-[#619173] font-bold text-xs uppercase tracking-widest">{data.role}</span>
-            <span className="text-white/70 text-sm font-medium">@ {data.company}</span>
+            <span className="text-[#619173] font-bold text-xs uppercase tracking-widest">
+              {data.role}
+            </span>
+            <span className="text-white/70 text-sm font-medium">
+              @ {data.company}
+            </span>
           </div>
-          <button className="w-full flex items-center justify-center gap-2 bg-[#32317D] hover:bg-white hover:text-[#32317D] text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+
+          <button className="w-full flex items-center justify-center gap-2 bg-[#32317D] hover:bg-white hover:text-[#32317D] text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 opacity-100 translate-y-0 cursor-pointer md:translate-y-2 md:group-hover:translate-y-0">
               Connect Now <Linkedin size={14} />
           </button>
         </div>
