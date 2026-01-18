@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Linkedin, Twitter, Quote, Sparkles } from "lucide-react";
+import { Linkedin } from "lucide-react";
 import { Poppins, Playfair_Display } from "next/font/google";
+
+// --- SWIPER IMPORTS ---
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
 
 // --- FONTS ---
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "800"] });
@@ -55,10 +61,10 @@ const mentors = [
   },
 ];
 
-// --- CARD COMPONENT (No Changes) ---
+// --- CARD COMPONENT ---
 function MentorCard({ data }) {
   return (
-    <div className="relative w-[280px] md:w-[340px] h-[400px] md:h-[500px] flex-shrink-0 rounded-3xl overflow-hidden group cursor-pointer border border-gray-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] bg-gray-100">
+    <div className="relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden group cursor-pointer border border-gray-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] bg-gray-100 select-none">
       <img 
         src={data.image} 
         alt={data.name} 
@@ -90,30 +96,26 @@ function MentorCard({ data }) {
 
 // --- MAIN SECTION ---
 export default function InfiniteMentors() {
-  const [isPaused, setIsPaused] = useState(false);
-
   return (
-    <section className={`bg-[#FAFAFA] py-20 md:py-28 relative overflow-hidden ${poppins.className}`}>
+    <section className={`bg-[#FAFAFA] py-20 md:pt-28 md:pb-10 relative overflow-hidden ${poppins.className}`}>
       
       {/* Background Decor */}
       <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#32317D]/5 rounded-full blur-[100px] pointer-events-none" />
 
-      {/* --- SIMPLIFIED CLEAN HEADER --- */}
-      <div className="container mx-auto px-4 mb-20 relative z-10">
+      {/* --- HEADER --- */}
+      <div className="container mx-auto px-4 mb-16 md:mb-20 relative z-10">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
           
-          {/* 1. Small Pill Badge */}
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-[#32317D]/5 border border-[#32317D]/10 text-[#32317D] text-xs font-bold uppercase tracking-widest"
           >
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span>We Connect you with giants</span>
           </motion.div>
 
-          {/* 2. Headline */}
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -127,7 +129,6 @@ export default function InfiniteMentors() {
             </span>
           </motion.h2>
 
-          {/* 3. Quote (Clean Text, No Card) */}
           <motion.div 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -144,38 +145,37 @@ export default function InfiniteMentors() {
         </div>
       </div>
 
-      {/* --- INFINITE SCROLL TRACK --- */}
-      <div 
-        className="relative w-full flex overflow-hidden mask-gradient-sides"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <div className="flex gap-6 md:gap-10 px-4 w-max animate-marquee will-change-transform hover:[animation-play-state:paused]">
-          {[...mentors, ...mentors, ...mentors].map((mentor, i) => (
-             <MentorCard key={i} data={mentor} />
+      {/* --- DRAGGABLE INFINITE SLIDER --- */}
+      <div className="w-full relative pl-4 md:pl-0">
+        <Swiper
+          spaceBetween={24}
+          slidesPerView={'auto'} // Allows slides to be their natural width
+          loop={true} // Infinite loop
+          speed={3000} // Speed of the auto-scroll
+          freeMode={true} // Allows smooth dragging
+          autoplay={{
+            delay: 0, // Continuous scrolling
+            disableOnInteraction: false, // Continues scrolling after you drag
+            pauseOnMouseEnter: true // Pauses when you hover (optional, good for UX)
+          }}
+          modules={[Autoplay, FreeMode]}
+          className="mentor-swiper !overflow-visible"
+        >
+          {mentors.map((mentor, i) => (
+            <SwiperSlide key={i} className="!w-[280px] md:!w-[340px] pt-4 pb-12 px-2">
+               <MentorCard data={mentor} />
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
-
-      {/* --- CSS STYLES --- */}
-      <style jsx>{`
-        .animate-marquee {
-          animation: marquee 50s linear infinite;
-        }
-        @media (max-width: 768px) {
-          .animate-marquee {
-            animation-duration: 40s;
-          }
-        }
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); }
-        }
-        .mask-gradient-sides {
-          mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-          -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      
+      {/* CSS Override for continuous linear scrolling */}
+      <style jsx global>{`
+        .mentor-swiper .swiper-wrapper {
+          transition-timing-function: linear;
         }
       `}</style>
+
     </section>
   );
 }

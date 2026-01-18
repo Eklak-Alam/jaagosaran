@@ -6,6 +6,10 @@
   color: white;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #ffffff;
   color: #0f172a; /* Slate 900 */
@@ -16,4 +20,9 @@ body {
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
     /* This creates a subtle diagonal cut at the bottom of the section */
   }
+}
+
+@keyframes subtleZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
 }

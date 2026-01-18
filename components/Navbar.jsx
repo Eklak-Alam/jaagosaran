@@ -10,14 +10,17 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { X, ArrowRight, ChevronRight, Zap, Grip, MenuIcon } from "lucide-react";
+import { X, ArrowRight, ChevronRight, Zap, MenuIcon } from "lucide-react";
 
+// --- UPDATED LINKS STRUCTURE ---
+// Note: We use "/#id" to ensure it works even if clicked from the /startups page
 const navLinks = [
   { name: "Home", href: "/" },
+  { name: "About", href: "/#about" },
   { name: "Startups", href: "/startups" },
-  { name: "Mentorship", href: "/mentorship" },
-  { name: "Community", href: "/community" },
-  { name: "Events", href: "/events" },
+  { name: "Mentorship", href: "/#mentorship" },
+  { name: "Community", href: "/#community" },
+  { name: "Events", href: "/#events" },
 ];
 
 export default function Navbar() {
@@ -49,16 +52,18 @@ export default function Navbar() {
         <div className="w-full h-full pointer-events-auto pt-4 md:pt-6 px-4">
           <motion.nav
             layout
+            // --- UPDATED BACKGROUND STYLING ---
+            // Even when NOT scrolled, it has bg-white/60 (Glass effect), so it's readable.
             className={`
               mx-auto flex items-center justify-between
               transition-all duration-500 ease-in-out
               ${scrolled 
-                ? "w-full max-w-5xl bg-white/85 backdrop-blur-xl border border-white/40 shadow-sm rounded-full py-3 px-5 md:px-6" 
-                : "w-full max-w-7xl bg-transparent border-transparent py-2 px-0"
+                ? "w-full max-w-5xl bg-white/90 backdrop-blur-xl border border-white/40 shadow-sm rounded-full py-3 px-5 md:px-6" 
+                : "w-full max-w-7xl bg-white/60 backdrop-blur-md border border-white/20 rounded-full py-3 px-5 md:px-6"
               }
             `}
           >
-            {/* --- 1. LOGO (Now strictly visible on Mobile) --- */}
+            {/* --- 1. LOGO --- */}
             <Link href="/" className="relative z-50 flex-shrink-0 block">
                <motion.div 
                  whileHover={{ scale: 1.05 }}
@@ -76,24 +81,26 @@ export default function Navbar() {
                </motion.div>
             </Link>
 
-            {/* --- 2. DESKTOP LINKS (Hidden on Mobile) --- */}
+            {/* --- 2. DESKTOP LINKS --- */}
             <div 
               className="hidden md:flex items-center gap-8"
               onMouseLeave={() => setHoveredPath(null)}
             >
               {navLinks.map((item) => {
-                const isActive = pathname === item.href;
+                // Active state logic handles both Paths and Hash links
+                const isActive = pathname === item.href || (pathname === "/" && item.href.startsWith("/#"));
+                
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     onMouseOver={() => setHoveredPath(item.href)}
                     className={`relative text-sm font-medium transition-colors duration-300
-                      ${isActive ? "text-[#32317D]" : "text-gray-500 hover:text-[#32317D]"}
+                      ${isActive ? "text-[#32317D] font-semibold" : "text-gray-600 hover:text-[#32317D]"}
                     `}
                   >
                     <span>{item.name}</span>
-                    {item.href === (hoveredPath || pathname) && (
+                    {item.href === hoveredPath && (
                       <motion.div
                         layoutId="underline"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
@@ -107,15 +114,11 @@ export default function Navbar() {
 
             {/* --- 3. RIGHT ACTIONS --- */}
             <div className="flex items-center gap-3 z-50">
-              {/* Desktop Join Button */}
               <Link
                 href="/join"
                 className={`
                   hidden md:flex group items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all 
-                  ${scrolled 
-                    ? "bg-[#32317D] text-white hover:bg-[#282768] shadow-lg shadow-indigo-500/20" 
-                    : "bg-white text-[#32317D] hover:bg-gray-50 shadow-md"
-                  }
+                  bg-[#32317D] text-white hover:bg-[#282768] shadow-lg shadow-indigo-500/20
                   hover:-translate-y-0.5 active:translate-y-0
                 `}
               >
@@ -123,18 +126,11 @@ export default function Navbar() {
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
 
-              {/* Mobile Trigger (New Design) */}
+              {/* Mobile Trigger */}
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className={`
-                  md:hidden p-2.5 rounded-full transition-all active:scale-90
-                  ${scrolled 
-                    ? "bg-gray-100 text-slate-800" 
-                    : "bg-white/90 backdrop-blur-md text-[#32317D] shadow-md"
-                  }
-                `}
+                className="md:hidden p-2.5 rounded-full bg-white/80 backdrop-blur-md text-[#32317D] shadow-sm border border-gray-100 active:scale-90 transition-all"
               >
-                {/* Changed to Grip for a more app-like feel */}
                 <MenuIcon size={24} />
               </button>
             </div>
@@ -142,11 +138,10 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* --- 4. MOBILE DRAWER (New Header with Logo) --- */}
+      {/* --- 4. MOBILE DRAWER --- */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -155,7 +150,6 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             />
 
-            {/* Drawer */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -164,17 +158,11 @@ export default function Navbar() {
               className="fixed top-2 right-2 bottom-2 w-[85%] max-w-[320px] bg-white rounded-2xl z-[150] shadow-2xl overflow-hidden flex flex-col border border-white/50"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* DRAWER HEADER: Replaced "Menu" text with Logo */}
+              {/* Drawer Header */}
               <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/50">
                  <div className="relative w-24 h-8">
-                   <Image 
-                     src="/logo2.png" 
-                     alt="Logo" 
-                     fill 
-                     className="object-contain object-left" 
-                   />
+                   <Image src="/logo2.png" alt="Logo" fill className="object-contain object-left" />
                  </div>
-                 
                  <button 
                    onClick={() => setMobileMenuOpen(false)} 
                    className="p-2 bg-white border border-gray-200 rounded-full text-gray-500 hover:text-red-500 hover:border-red-200 transition-colors"
@@ -183,7 +171,7 @@ export default function Navbar() {
                  </button>
               </div>
 
-              {/* DRAWER LINKS */}
+              {/* Drawer Links */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
                 {navLinks.map((item, i) => (
                     <motion.div
@@ -195,21 +183,16 @@ export default function Navbar() {
                       <Link
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center justify-between p-3.5 rounded-xl transition-all border
-                          ${pathname === item.href 
-                            ? "bg-[#32317D]/5 border-[#32317D]/10 text-[#32317D] shadow-sm" 
-                            : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-100"
-                          }
-                        `}
+                        className="flex items-center justify-between p-3.5 rounded-xl transition-all border border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-100"
                       >
                         <span className="font-semibold text-sm">{item.name}</span>
-                        {pathname === item.href ? <Zap size={16} fill="currentColor" /> : <ChevronRight size={16} className="opacity-40" />}
+                        <ChevronRight size={16} className="opacity-40" />
                       </Link>
                     </motion.div>
                 ))}
               </div>
 
-              {/* DRAWER FOOTER */}
+              {/* Drawer Footer */}
               <div className="p-4 bg-gray-50 border-t border-gray-100">
                 <Link 
                   href="/join" 
