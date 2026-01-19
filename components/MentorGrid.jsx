@@ -24,10 +24,10 @@ const mentors = [
     image: "/mentorimage/prabhat.jpg",
   },
   {
-    name: "Sneha Roy",
-    role: "Partner",
-    company: "BiharFund",
-    image: "https://images.unsplash.com/photo-1573496359-136d9420f9d1?w=600&h=800&fit=crop",
+    name: "Vinay kumar ",
+    role: "Chartered Accountant ",
+    company: "V.k sah & Co",
+    image: "/mentorimage/vinay.jpg",
   },
   {
     name: "Rahul Singh",
